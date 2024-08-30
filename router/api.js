@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
 
 router.post(
   "/image/store",
-  fileUpload.single("uploaded_image"),
+  fileUpload,
   convertToWebP,
   ImageController.store
 );

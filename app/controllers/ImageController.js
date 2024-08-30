@@ -1,14 +1,17 @@
 const ImageController = {
   store: async (req, res) => {
-    if (!req.file || !req.file.filename) {
+    if (!req.convertedFiles || req.convertedFiles.length === 0) {
       return res.status(400).json({
         message: "Image upload failed",
       });
     }
 
+    // Construct the URLs for all uploaded WebP images using the APP_URL environment variable
+    const imageUrls = req.convertedFiles.map(file => `${process.env.APP_URL}/images/${file.filename}`);
+
     res.status(200).json({
-      message: "Image uploaded successfully",
-      imageUrl: `${process.env.APP_URL}` + "/images/" + req.file.filename,
+      message: "Images uploaded successfully",
+      data: imageUrls
     });
   },
 };
