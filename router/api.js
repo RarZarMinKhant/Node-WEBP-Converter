@@ -1,15 +1,20 @@
 const express = require("express");
 const router = express.Router();
 const ImageController = require("../app/controllers/ImageController.js");
-const { fileUpload, convertToWebP } = require("../app/helpers/fileUpload.js");
+const {
+  fileUpload,
+  convertToWebP,
+  processImageUrls,
+} = require("../app/helpers/fileUpload.js");
 
 router.get("/", (req, res) => {
   res.status(200).json({ message: "Welcome" });
 });
 
 router.post(
-  "/image/store",
+  "/images/store",
   fileUpload,
+  processImageUrls,
   convertToWebP,
   ImageController.store
 );
