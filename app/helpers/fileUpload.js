@@ -6,15 +6,7 @@ const sharp = require("sharp");
 // Define allowed file types
 const ALLOWED_FILE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    let destinationPath = path.join(__dirname, "../../public/images");
-    cb(null, destinationPath);
-  },
-  filename: function (req, file, cb) {
-    cb(null, uuidv4() + path.extname(file.originalname));
-  },
-});
+const storage = multer.memoryStorage(); // Use memory storage instead of disk storage
 
 const fileFilter = (req, file, cb) => {
   if (ALLOWED_FILE_TYPES.includes(file.mimetype)) {
@@ -40,20 +32,18 @@ const convertToWebP = async (req, res, next) => {
     return next(new Error("No file uploaded"));
   }
 
-  const originalPath = path.join(
-    __dirname,
-    "../../public/images",
-    req.file.filename
-  );
   const webpFilename = `${uuidv4()}.webp`;
   const webpPath = path.join(__dirname, "../../public/images", webpFilename);
 
   try {
-    await sharp(originalPath).webp({ quality: 80 }).toFile(webpPath);
+    // Convert the file buffer to WebP and save it to disk
+    await sharp(req.file.buffer)
+      .webp({ quality: 80 })
+      .toFile(webpPath);
 
     // Store the WebP image path in the request object for further processing in the controller
-    req.file.webpFilename = webpFilename;
-    req.file.webpPath = webpPath;
+    req.file.filename = webpFilename;
+    req.file.path = webpPath;
     next();
   } catch (err) {
     next(err);
