@@ -4,7 +4,6 @@ const { v4: uuidv4 } = require("uuid");
 const sharp = require("sharp");
 const axios = require("axios");
 
-// Define allowed file types
 const ALLOWED_FILE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 const storage = multer.memoryStorage();
@@ -35,9 +34,7 @@ const processImageUrls = async (req, res, next) => {
     try {
       const urlFiles = [];
 
-      const urlArray = Array.isArray(urls) ? urls : [urls]; // Ensure urls is always an array
-
-      for (const url of urlArray) {
+      for (const url of JSON.parse(urls)) {
         try {
           const response = await axios.get(url, {
             responseType: "arraybuffer",
