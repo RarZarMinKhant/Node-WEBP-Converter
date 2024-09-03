@@ -19,6 +19,8 @@ router.post(
   ImageController.store
 );
 
+router.get("/get-images", ImageController.getImages);
+
 // 404 Error Handler
 router.use((req, res) => {
   res.status(404).json({ message: "404 page not found" });
