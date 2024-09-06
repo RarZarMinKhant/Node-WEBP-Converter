@@ -24,8 +24,7 @@ const ImageController = {
     try {
       const baseUrl = 'https://static.hl8888.vip/webpFolders/akgaming/';
       const publicFolder = path.join(__dirname, '../../public/game-images');
-
-      // Ensure the public folder exists
+      
       if (!fs.existsSync(publicFolder)) {
         fs.mkdirSync(publicFolder, { recursive: true });
       }
